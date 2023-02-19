@@ -1,4 +1,4 @@
-package com.paypay.config;
+package com.paypay;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-public class PostgresConfig {
+public class ConfigApplication {
 
     @Profile("production")
     @Bean(name = "postgresDataSource")
@@ -17,7 +17,7 @@ public class PostgresConfig {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/paypay");
         config.setUsername("postgres");
-        config.setPassword("");
+        config.setPassword("123456");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
