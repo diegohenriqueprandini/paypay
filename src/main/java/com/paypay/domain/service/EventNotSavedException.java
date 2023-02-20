@@ -1,4 +1,4 @@
-package com.paypay.application.domain.service;
+package com.paypay.domain.service;
 
 import java.util.UUID;
 

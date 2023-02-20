@@ -1,4 +1,4 @@
-package com.paypay.application.domain.entity;
+package com.paypay.domain.entity;
 
 import lombok.Data;
 
@@ -15,12 +15,12 @@ public class Event {
         this.name = name;
     }
 
-    public Event(Database database) {
-        this.id = database.id();
-        this.name = database.name();
+    public Event(EventData eventData) {
+        this.id = eventData.id();
+        this.name = eventData.name();
     }
 
-    public record Database(UUID id, String name) {
+    public record EventData(UUID id, String name) {
     }
 }
 

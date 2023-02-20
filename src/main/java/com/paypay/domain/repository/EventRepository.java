@@ -1,6 +1,6 @@
-package com.paypay.application.domain.repository;
+package com.paypay.domain.repository;
 
-import com.paypay.application.domain.entity.Event;
+import com.paypay.domain.entity.Event;
 
 import java.util.List;
 import java.util.Optional;

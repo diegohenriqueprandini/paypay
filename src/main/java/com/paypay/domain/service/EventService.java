@@ -1,7 +1,7 @@
-package com.paypay.application.domain.service;
+package com.paypay.domain.service;
 
-import com.paypay.application.domain.entity.Event;
-import com.paypay.application.domain.repository.EventRepository;
+import com.paypay.domain.entity.Event;
+import com.paypay.domain.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

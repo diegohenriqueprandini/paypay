@@ -1,9 +1,9 @@
 package com.paypay.infra.controller;
 
-import com.paypay.application.domain.service.EventAlreadyExistsException;
-import com.paypay.application.domain.service.EventNotFountException;
-import com.paypay.application.domain.service.EventNotSavedException;
-import com.paypay.application.domain.service.EventService;
+import com.paypay.domain.service.EventAlreadyExistsException;
+import com.paypay.domain.service.EventNotFountException;
+import com.paypay.domain.service.EventNotSavedException;
+import com.paypay.domain.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

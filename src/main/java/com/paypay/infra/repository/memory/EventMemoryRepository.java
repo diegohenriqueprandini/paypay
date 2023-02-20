@@ -1,7 +1,7 @@
 package com.paypay.infra.repository.memory;
 
-import com.paypay.application.domain.entity.Event;
-import com.paypay.application.domain.repository.EventRepository;
+import com.paypay.domain.entity.Event;
+import com.paypay.domain.repository.EventRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Profile("memory")
 public class EventMemoryRepository implements EventRepository {
 
-    private final List<Event.Database> events = new ArrayList<>();
+    private final List<Event.EventData> events = new ArrayList<>();
 
     @Override
     public List<Event> getAll() {
@@ -34,26 +34,26 @@ public class EventMemoryRepository implements EventRepository {
 
     @Override
     public void save(Event event) {
-        Event.Database databaseData = new Event.Database(
+        Event.EventData eventData = new Event.EventData(
                 event.getId(),
                 event.getName()
         );
-        Optional<Event.Database> existing = events.stream()
+        Optional<Event.EventData> existing = events.stream()
                 .filter(item -> item.id().equals(event.getId()))
                 .findFirst();
 
         if (existing.isPresent()) {
             events.remove(existing.get());
-            events.add(databaseData);
+            events.add(eventData);
             return;
         }
 
-        events.add(databaseData);
+        events.add(eventData);
     }
 
     @Override
     public void remove(Event event) {
-        Optional<Event.Database> existing = events.stream()
+        Optional<Event.EventData> existing = events.stream()
                 .filter(item -> item.id().equals(event.getId()))
                 .findFirst();
         existing.ifPresent(events::remove);

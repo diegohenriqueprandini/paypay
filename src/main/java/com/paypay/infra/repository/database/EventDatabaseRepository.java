@@ -1,7 +1,7 @@
 package com.paypay.infra.repository.database;
 
-import com.paypay.application.domain.repository.EventRepository;
-import com.paypay.application.domain.entity.Event;
+import com.paypay.domain.repository.EventRepository;
+import com.paypay.domain.entity.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class EventDatabaseRepository implements EventRepository {
     public List<Event> getAll() {
         List<EventTable> databaseData = eventJpaRepository.findAll();
         return databaseData.stream()
-                .map((data) -> new Event(new Event.Database(
+                .map(data -> new Event(new Event.EventData(
                         data.getId(),
                         data.getName()
                 )))
@@ -32,7 +32,7 @@ public class EventDatabaseRepository implements EventRepository {
     @Override
     public Optional<Event> getOne(UUID id) {
         return eventJpaRepository.findById(id)
-                .map((EventTable data) -> new Event(new Event.Database(
+                .map(data -> new Event(new Event.EventData(
                         data.getId(),
                         data.getName()
                 )));
@@ -57,7 +57,7 @@ public class EventDatabaseRepository implements EventRepository {
     @Override
     public Optional<Event> findByName(String name) {
         return eventJpaRepository.findByName(name)
-                .map((EventTable data) -> new Event(new Event.Database(
+                .map(data -> new Event(new Event.EventData(
                         data.getId(),
                         data.getName()
                 )));
