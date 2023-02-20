@@ -11,6 +11,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       PGDATA: /data/postgres
+      POSTGRES_DB: paypay
     volumes:
       - postgres:/data/postgres
     networks:
