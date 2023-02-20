@@ -2,6 +2,7 @@ package com.paypay.application;
 
 import com.paypay.domain.entity.Event;
 import com.paypay.domain.repository.EventAlreadyExistsException;
+import com.paypay.domain.repository.EventNotFountException;
 import com.paypay.domain.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventOutput getOne(UUID id) {
+    public EventOutput getOne(UUID id) throws EventNotFountException {
         Event event = eventRepository.getOne(id);
         return new EventOutput(
                 event.getId(),
@@ -34,7 +35,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public EventOutput createEvent(EventInput input) throws EventAlreadyExistsException {
+    public EventOutput createEvent(EventInput input) throws EventAlreadyExistsException, EventNotFountException {
         Optional<Event> existing = eventRepository.findByName(input.name);
         if (existing.isPresent())
             throw new EventAlreadyExistsException(input.name);
@@ -48,7 +49,7 @@ public class EventService {
         );
     }
 
-    public EventOutput updateEvent(UUID id, EventInput input) {
+    public EventOutput updateEvent(UUID id, EventInput input) throws EventNotFountException, EventAlreadyExistsException {
         Event existingById = eventRepository.getOne(id);
         Optional<Event> existingByName = eventRepository.findByName(input.name);
         if (existingByName.isPresent() && !existingByName.get().getId().equals(id))
@@ -62,7 +63,7 @@ public class EventService {
         );
     }
 
-    public void removeEvent(UUID id) {
+    public void removeEvent(UUID id) throws EventNotFountException {
         Event existing = eventRepository.getOne(id);
         eventRepository.remove(existing);
     }

@@ -28,7 +28,7 @@ public class EventDatabaseRepository implements EventRepository {
     }
 
     @Override
-    public Event getOne(UUID id) {
+    public Event getOne(UUID id) throws EventNotFountException {
         return eventJpaRepository.findById(id)
                 .map(data -> new Event(data.toEventData()))
                 .orElseThrow(() -> new EventNotFountException(id));

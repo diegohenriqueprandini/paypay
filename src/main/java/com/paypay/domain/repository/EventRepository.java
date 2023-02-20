@@ -10,7 +10,7 @@ public interface EventRepository {
 
     List<Event> getAll();
 
-    Event getOne(UUID id);
+    Event getOne(UUID id) throws EventNotFountException;
 
     void save(Event event);
 

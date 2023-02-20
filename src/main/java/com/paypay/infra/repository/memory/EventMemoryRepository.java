@@ -26,7 +26,7 @@ public class EventMemoryRepository implements EventRepository {
     }
 
     @Override
-    public Event getOne(UUID id) {
+    public Event getOne(UUID id) throws EventNotFountException {
         return events.stream()
                 .filter(item -> item.id().equals(id))
                 .map(Event::new)
