@@ -10,7 +10,7 @@ public interface EventRepository {
 
     List<Event> getAll();
 
-    Optional<Event> getOne(UUID id);
+    Event getOne(UUID id);
 
     void save(Event event);
 

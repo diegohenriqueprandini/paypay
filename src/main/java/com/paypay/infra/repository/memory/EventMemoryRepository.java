@@ -1,6 +1,7 @@
 package com.paypay.infra.repository.memory;
 
 import com.paypay.domain.entity.Event;
+import com.paypay.domain.repository.EventNotFountException;
 import com.paypay.domain.repository.EventRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -25,29 +26,25 @@ public class EventMemoryRepository implements EventRepository {
     }
 
     @Override
-    public Optional<Event> getOne(UUID id) {
+    public Event getOne(UUID id) {
         return events.stream()
                 .filter(item -> item.id().equals(id))
                 .map(Event::new)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new EventNotFountException(id));
     }
 
     @Override
     public void save(Event event) {
-        Event.EventData eventData = new Event.EventData(
-                event.getId(),
-                event.getName()
-        );
+        Event.EventData eventData = event.toData();
         Optional<Event.EventData> existing = events.stream()
                 .filter(item -> item.id().equals(event.getId()))
                 .findFirst();
-
         if (existing.isPresent()) {
             events.remove(existing.get());
             events.add(eventData);
             return;
         }
-
         events.add(eventData);
     }
 

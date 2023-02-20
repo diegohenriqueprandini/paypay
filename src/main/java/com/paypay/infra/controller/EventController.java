@@ -1,17 +1,13 @@
 package com.paypay.infra.controller;
 
-import com.paypay.domain.service.EventAlreadyExistsException;
-import com.paypay.domain.service.EventNotFountException;
-import com.paypay.domain.service.EventNotSavedException;
-import com.paypay.domain.service.EventService;
+import com.paypay.application.EventService;
+import com.paypay.utils.ControllerUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -21,80 +17,32 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAll() {
+    public ResponseEntity<List<EventService.EventOutput>> getAll() {
         List<EventService.EventOutput> output = eventService.getAll();
-        return ResponseEntity.ok(output.stream()
-                .map(item -> new EventResponse(
-                        item.id(),
-                        item.name()
-                ))
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok(output);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getOne(@PathVariable UUID id) {
-        try {
-            EventService.EventOutput output = eventService.getOne(id);
-            return ResponseEntity.ok(new EventResponse(
-                    output.id(),
-                    output.name()
-            ));
-        } catch (EventNotFountException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<EventService.EventOutput> getOne(@PathVariable UUID id) {
+        EventService.EventOutput output = eventService.getOne(id);
+        return ResponseEntity.ok(output);
     }
 
     @PostMapping
-    public ResponseEntity<EventResponse> createEvent(@RequestBody EventBody body) {
-        try {
-            EventService.EventInput input = new EventService.EventInput(body.name());
-            EventService.EventOutput output = eventService.createEvent(input);
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(new EventResponse(
-                            output.id(),
-                            output.name()
-                    ));
-        } catch (EventAlreadyExistsException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (EventNotSavedException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<EventService.EventOutput> createEvent(@RequestBody EventService.EventInput input) {
+        EventService.EventOutput output = eventService.createEvent(input);
+        return ResponseEntity.created(ControllerUtils.createUri(output.id(), "/events")).body(output);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventResponse> updateEvent(@PathVariable UUID id, @RequestBody EventBody body) {
-        try {
-            EventService.EventInput input = new EventService.EventInput(body.name);
-            EventService.EventOutput output = eventService.updateEvent(id, input);
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(new EventResponse(
-                            output.id(),
-                            output.name()
-                    ));
-        } catch (EventNotFountException e) {
-            return ResponseEntity.notFound().build();
-        } catch (EventNotSavedException e) {
-            return ResponseEntity.internalServerError().build();
-        } catch (EventAlreadyExistsException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<EventService.EventOutput> updateEvent(@PathVariable UUID id, @RequestBody EventService.EventInput input) {
+        EventService.EventOutput output = eventService.updateEvent(id, input);
+        return ResponseEntity.ok(output);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeEvent(@PathVariable UUID id) {
-        try {
-            eventService.removeEvent(id);
-            return ResponseEntity.ok().build();
-        } catch (EventNotFountException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    private record EventBody(String name) {
-    }
-
-    private record EventResponse(UUID id, String name) {
+        eventService.removeEvent(id);
+        return ResponseEntity.ok().build();
     }
 }

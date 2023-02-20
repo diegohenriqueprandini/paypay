@@ -20,6 +20,13 @@ public class Event {
         this.name = eventData.name();
     }
 
+    public EventData toData() {
+        return new EventData(
+                this.id,
+                this.name
+        );
+    }
+
     public record EventData(UUID id, String name) {
     }
 }

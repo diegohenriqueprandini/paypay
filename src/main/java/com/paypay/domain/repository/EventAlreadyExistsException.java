@@ -1,6 +1,6 @@
-package com.paypay.domain.service;
+package com.paypay.domain.repository;
 
-public class EventAlreadyExistsException extends Exception {
+public class EventAlreadyExistsException extends RuntimeException {
     public EventAlreadyExistsException(String name) {
         super("Event already exists: " + name);
     }
