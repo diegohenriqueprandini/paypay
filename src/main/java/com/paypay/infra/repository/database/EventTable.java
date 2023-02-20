@@ -2,18 +2,20 @@ package com.paypay.infra.repository.database;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
 @Entity
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventTable {
 
     @Id
-    private final UUID id;
+    private UUID id;
 
-    private final String name;
+    private String name;
 }

@@ -3,12 +3,14 @@ package com.paypay.application.domain.service;
 import com.paypay.application.domain.entity.Event;
 import com.paypay.application.domain.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 @RequiredArgsConstructor
 public class EventService {
 

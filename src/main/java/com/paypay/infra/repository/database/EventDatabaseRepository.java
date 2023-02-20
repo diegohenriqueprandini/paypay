@@ -3,12 +3,16 @@ package com.paypay.infra.repository.database;
 import com.paypay.application.domain.repository.EventRepository;
 import com.paypay.application.domain.entity.Event;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
+@Profile("production")
 @RequiredArgsConstructor
 public class EventDatabaseRepository implements EventRepository {
 
