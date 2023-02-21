@@ -3,7 +3,7 @@ package com.paypay.infra.repository.memory;
 import com.paypay.domain.entity.Event;
 import com.paypay.domain.repository.EventNotFountException;
 import com.paypay.domain.repository.EventRepository;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("memory")
+@ConditionalOnProperty(value = "application.inject.event-repository", havingValue = "memory")
 public class EventMemoryRepository implements EventRepository {
 
     private final List<Event.EventData> events = new ArrayList<>();

@@ -1,22 +1,22 @@
 server:
   error:
-    include-stacktrace: on_param
+    include-stacktrace: never
 
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: prod
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
-      format_sql: true
+      format_sql: false
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
   swagger-ui:
-    enabled: true
+    enabled: false
 
 logging:
   level:
@@ -24,4 +24,4 @@ logging:
 
 application:
   inject:
-    event-repository: memory
+    event-repository: database

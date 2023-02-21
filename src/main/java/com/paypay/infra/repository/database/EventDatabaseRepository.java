@@ -4,7 +4,7 @@ import com.paypay.domain.entity.Event;
 import com.paypay.domain.repository.EventNotFountException;
 import com.paypay.domain.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("production")
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "application.inject.event-repository", havingValue = "database")
 public class EventDatabaseRepository implements EventRepository {
 
     private final EventJpaRepository eventJpaRepository;

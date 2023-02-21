@@ -5,7 +5,7 @@ server:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: dev
 
   jpa:
     show-sql: true
