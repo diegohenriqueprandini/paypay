@@ -25,3 +25,12 @@ logging:
 application:
   inject:
     event-repository: database
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
