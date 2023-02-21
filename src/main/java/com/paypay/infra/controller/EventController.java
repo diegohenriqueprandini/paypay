@@ -3,7 +3,7 @@ package com.paypay.infra.controller;
 import com.paypay.application.EventService;
 import com.paypay.domain.repository.EventAlreadyExistsException;
 import com.paypay.domain.repository.EventNotFountException;
-import com.paypay.utils.ControllerUtils;
+import com.paypay.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity<EventService.EventOutput> createEvent(@RequestBody EventService.EventInput input) throws EventNotFountException, EventAlreadyExistsException {
         EventService.EventOutput output = eventService.createEvent(input);
-        return ResponseEntity.created(ControllerUtils.createUri(output.id(), "/events")).body(output);
+        return ResponseEntity.created(ApiUtils.createUri(output.id(), "/events")).body(output);
     }
 
     @PutMapping("/{id}")

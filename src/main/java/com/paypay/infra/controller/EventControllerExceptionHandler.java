@@ -2,7 +2,7 @@ package com.paypay.infra.controller;
 
 import com.paypay.domain.repository.EventAlreadyExistsException;
 import com.paypay.domain.repository.EventNotFountException;
-import com.paypay.utils.JsonUtilsException;
+import com.paypay.utils.JsonUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -39,8 +39,8 @@ public class EventControllerExceptionHandler extends ResponseEntityExceptionHand
         return createDefaultResponseByException(details, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(JsonUtilsException.class)
-    public final ResponseEntity<EventControllerData> jsonUtilsException(JsonUtilsException e, WebRequest request) {
+    @ExceptionHandler(JsonUtils.JsonUtilsException.class)
+    public final ResponseEntity<EventControllerData> jsonUtilsException(JsonUtils.JsonUtilsException e, WebRequest request) {
         final var details = createDefaultExceptionDetails(e, request);
         return createDefaultResponseByException(details, HttpStatus.INTERNAL_SERVER_ERROR);
     }

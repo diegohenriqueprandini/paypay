@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 
 public class JsonUtils {
 
-    private static final ObjectMapper objectMapper = defaultJackson2ObjectMapperBuilder().build();
+    private static final ObjectMapper OBJECT_MAPPER = defaultJackson2ObjectMapperBuilder().build();
 
     private JsonUtils() {
     }
@@ -36,7 +36,7 @@ public class JsonUtils {
 
     public static String toJson(Object object) {
         try {
-            return objectMapper.writeValueAsString(object);
+            return OBJECT_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new JsonUtilsException(e);
         }
@@ -44,7 +44,7 @@ public class JsonUtils {
 
     public static <T> T fromJson(String jsonObject, Class<T> type) {
         try {
-            return objectMapper.readValue(jsonObject, type);
+            return OBJECT_MAPPER.readValue(jsonObject, type);
         } catch (JsonProcessingException e) {
             throw new JsonUtilsException(e);
         }
@@ -52,9 +52,15 @@ public class JsonUtils {
 
     public static <T> T fromJson(String jsonObject, TypeReference<T> valueTypeRef) {
         try {
-            return objectMapper.readValue(jsonObject, valueTypeRef);
+            return OBJECT_MAPPER.readValue(jsonObject, valueTypeRef);
         } catch (JsonProcessingException e) {
             throw new JsonUtilsException(e);
+        }
+    }
+
+    public static class JsonUtilsException extends RuntimeException {
+        public JsonUtilsException(Exception e) {
+            super(e);
         }
     }
 }

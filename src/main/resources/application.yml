@@ -6,9 +6,17 @@ server:
 spring:
   profiles:
     active: memory
+
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+  jpa:
+    open-in-view: false
+    properties:
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: NONE
 
 springdoc:
   swagger-ui:
@@ -17,3 +25,8 @@ springdoc:
 application:
   title: @artifactId@
   version: @version@
+
+logging:
+  level:
+    root: INFO
+

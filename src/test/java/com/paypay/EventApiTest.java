@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventApiTest {
 
     @Autowired
-    protected MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
     private EventMemoryRepository eventMemoryRepository;
@@ -44,7 +44,8 @@ class EventApiTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString(Charset.defaultCharset());
         assertThat(json).isEqualTo("[]");
-        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() { });
+        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() {
+        });
         assertThat(output).isEmpty();
     }
 
@@ -59,7 +60,8 @@ class EventApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString(Charset.defaultCharset());
-        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() { });
+        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() {
+        });
         assertThat(output).hasSize(1);
         assertThat(output.get(0).id()).isEqualTo(id);
         assertThat(output.get(0).name()).isEqualTo("A");
