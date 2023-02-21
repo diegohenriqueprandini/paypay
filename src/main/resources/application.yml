@@ -23,8 +23,12 @@ spring:
             mode: NONE
 
 springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: false
   swagger-ui:
     enabled: false
+    path: /swagger-ui.html
 
 application:
   title: @artifactId@
