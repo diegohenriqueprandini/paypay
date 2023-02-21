@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class EventControllerData {
 
-    private Instant timestamp;
+    private LocalDateTime timestamp;
     private String message;
     private String detail;
 }
