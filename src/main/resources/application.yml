@@ -10,7 +10,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+
   jpa:
+    show-sql: false
+    hibernate:
+      format_sql: false
     open-in-view: false
     properties:
       jakarta:
@@ -20,7 +24,7 @@ spring:
 
 springdoc:
   swagger-ui:
-    enabled: true
+    enabled: false
 
 application:
   title: @artifactId@
