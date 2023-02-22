@@ -23,5 +23,6 @@ logging:
     root: INFO
 
 application:
-  inject:
-    event-repository: memory
+  config:
+    repository: memory
+    cache: memory

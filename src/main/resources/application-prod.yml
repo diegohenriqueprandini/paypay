@@ -12,6 +12,12 @@ spring:
     hibernate:
       format_sql: false
 
+  redis:
+    host: localhost
+    port: 6379
+    password: ''
+    ssl: false
+
 springdoc:
   api-docs:
     enabled: false
@@ -23,8 +29,9 @@ logging:
     root: INFO
 
 application:
-  inject:
-    event-repository: database
+  config:
+    repository: cached-database
+    cache: database
 
 management:
   endpoints:

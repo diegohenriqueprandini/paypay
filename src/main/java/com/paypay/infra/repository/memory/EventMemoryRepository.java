@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@ConditionalOnProperty(value = "application.inject.event-repository", havingValue = "memory")
+@ConditionalOnProperty(value = "application.config.repository", havingValue = "memory")
 public class EventMemoryRepository implements EventRepository {
 
     private final List<Event.EventData> events = new ArrayList<>();
@@ -21,7 +21,7 @@ public class EventMemoryRepository implements EventRepository {
     @Override
     public List<Event> getAll() {
         return events.stream()
-                .map(Event::new)
+                .map(Event::from)
                 .collect(Collectors.toList());
     }
 
@@ -29,7 +29,7 @@ public class EventMemoryRepository implements EventRepository {
     public Event getOne(UUID id) throws EventNotFountException {
         return events.stream()
                 .filter(item -> item.id().equals(id))
-                .map(Event::new)
+                .map(Event::from)
                 .findFirst()
                 .orElseThrow(() -> new EventNotFountException(id));
     }
@@ -60,7 +60,7 @@ public class EventMemoryRepository implements EventRepository {
     public Optional<Event> findByName(String name) {
         return events.stream()
                 .filter(item -> item.name().equals(name))
-                .map(Event::new)
+                .map(Event::from)
                 .findFirst();
     }
 }

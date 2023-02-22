@@ -15,9 +15,11 @@ public class Event {
         this.name = name;
     }
 
-    public Event(EventData eventData) {
-        this.id = eventData.id();
-        this.name = eventData.name();
+    public static Event from(EventData data) {
+        return new Event(
+                data.id(),
+                data.name()
+        );
     }
 
     public EventData toData() {

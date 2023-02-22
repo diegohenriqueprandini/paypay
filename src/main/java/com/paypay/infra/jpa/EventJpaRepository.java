@@ -1,4 +1,4 @@
-package com.paypay.infra.repository.database;
+package com.paypay.infra.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

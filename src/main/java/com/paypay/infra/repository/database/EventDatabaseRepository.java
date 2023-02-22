@@ -3,6 +3,8 @@ package com.paypay.infra.repository.database;
 import com.paypay.domain.entity.Event;
 import com.paypay.domain.repository.EventNotFountException;
 import com.paypay.domain.repository.EventRepository;
+import com.paypay.infra.jpa.EventJpaRepository;
+import com.paypay.infra.jpa.EventTable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "application.inject.event-repository", havingValue = "database")
+@ConditionalOnProperty(value = "application.config.repository", havingValue = "database")
 public class EventDatabaseRepository implements EventRepository {
 
     private final EventJpaRepository eventJpaRepository;
@@ -23,36 +25,30 @@ public class EventDatabaseRepository implements EventRepository {
     public List<Event> getAll() {
         List<EventTable> databaseData = eventJpaRepository.findAll();
         return databaseData.stream()
-                .map(data -> new Event(data.toEventData()))
+                .map(data -> Event.from(data.toEventData()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Event getOne(UUID id) throws EventNotFountException {
         return eventJpaRepository.findById(id)
-                .map(data -> new Event(data.toEventData()))
+                .map(data -> Event.from(data.toEventData()))
                 .orElseThrow(() -> new EventNotFountException(id));
     }
 
     @Override
     public void save(Event event) {
-        eventJpaRepository.save(new EventTable(
-                event.getId(),
-                event.getName()
-        ));
+        eventJpaRepository.save(EventTable.from(event.toData()));
     }
 
     @Override
     public void remove(Event event) {
-        eventJpaRepository.delete(new EventTable(
-                event.getId(),
-                event.getName()
-        ));
+        eventJpaRepository.delete(EventTable.from(event.toData()));
     }
 
     @Override
     public Optional<Event> findByName(String name) {
         return eventJpaRepository.findByName(name)
-                .map(data -> new Event(data.toEventData()));
+                .map(data -> Event.from(data.toEventData()));
     }
 }

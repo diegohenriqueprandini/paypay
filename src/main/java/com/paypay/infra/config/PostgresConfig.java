@@ -2,17 +2,17 @@ package com.paypay.infra.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
 @Configuration
+@ConditionalOnExpression("'${application.config.repository}'.equals('database') or '${application.config.repository}'.equals('cached-database')")
 public class PostgresConfig {
 
     @Bean(name = "postgresDataSource")
-    @ConditionalOnProperty(value = "application.inject.event-repository", havingValue = "database")
     public DataSource postgresDataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/paypay");

@@ -33,6 +33,8 @@ springdoc:
 application:
   title: @artifactId@
   version: @version@
+  cache:
+    default-timeout: 600
 
 logging:
   level:
