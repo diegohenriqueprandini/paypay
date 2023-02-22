@@ -16,6 +16,7 @@ services:
       - postgres:/data/postgres
     networks:
       - postgres
+    hostname: postgres
 
   pgadmin:
     container_name: pgadmin
@@ -31,6 +32,9 @@ services:
     volumes:
       - pgadmin:/var/lib/pgadmin
     networks:
+      - postgres
+    hostname: pgadmin
+    depends_on:
       - postgres
 
   rabbitmq:
@@ -48,6 +52,17 @@ services:
       - rabbitmq_log:/var/log/rabbitmq
     networks:
       - rabbitmq
+    hostname: rabbitmq
+
+  redis:
+    container_name: redis
+    image: redis:7.0.8-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    hostname: redis
 
 networks:
   postgres:
@@ -60,3 +75,4 @@ volumes:
   pgadmin:
   rabbitmq_log:
   rabbitmq_data:
+  redis:
