@@ -36,12 +36,8 @@ class EventApiTest {
 
     @Test
     void deveRetornarUmaListaVazia() throws Exception {
-        MockMvcHandler<List<EventService.EventOutput>> handler = new MockMvcHandler<>(new TypeReference<>() {
-        });
+        List<EventService.EventOutput> output = doGetAllEvents();
 
-        doGetAllEvents(handler);
-
-        List<EventService.EventOutput> output = handler.get();
         assertThat(output).isEmpty();
     }
 
@@ -51,12 +47,8 @@ class EventApiTest {
         Event event = new Event(id, "A");
         eventMemoryRepository.save(event);
 
-        MockMvcHandler<List<EventService.EventOutput>> handler = new MockMvcHandler<>(new TypeReference<>() {
-        });
+        List<EventService.EventOutput> output = doGetAllEvents();
 
-        doGetAllEvents(handler);
-
-        List<EventService.EventOutput> output = handler.get();
         assertThat(output).hasSize(1);
         assertThat(output.get(0).id()).isEqualTo(id);
         assertThat(output.get(0).name()).isEqualTo("A");
@@ -68,29 +60,31 @@ class EventApiTest {
         Event event = new Event(id, "A");
         eventMemoryRepository.save(event);
 
-        MockMvcHandler<EventService.EventOutput> handler = new MockMvcHandler<>(EventService.EventOutput.class);
+        EventService.EventOutput output = doGetOneEvent(id);
 
-        doGetOneEvent(id, handler);
-
-        EventService.EventOutput output = handler.get();
         assertThat(output).isNotNull();
         assertThat(output.id()).isEqualTo(id);
         assertThat(output.name()).isEqualTo("A");
     }
 
-    private void doGetOneEvent(UUID id, MockMvcHandler<?> handler) throws Exception {
+    private EventService.EventOutput doGetOneEvent(UUID id) throws Exception {
+        MockMvcHandler<EventService.EventOutput> handler = new MockMvcHandler<>(EventService.EventOutput.class);
         mockMvc.perform(get("/events/{id}", id.toString()).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(handler);
+        return handler.get();
     }
 
-    private void doGetAllEvents(MockMvcHandler<?> handler) throws Exception {
+    private List<EventService.EventOutput> doGetAllEvents() throws Exception {
+        MockMvcHandler<List<EventService.EventOutput>> handler = new MockMvcHandler<>(new TypeReference<>() {
+        });
         mockMvc.perform(get("/events").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(handler);
+        return handler.get();
     }
 }
