@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.paypay.application.EventService;
 import com.paypay.domain.entity.Event;
 import com.paypay.infra.repository.memory.EventMemoryRepository;
-import com.paypay.utils.JsonUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +13,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,14 +36,12 @@ class EventApiTest {
 
     @Test
     void deveRetornarUmaListaVazia() throws Exception {
-        String json = mockMvc.perform(get("/events").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(Charset.defaultCharset());
-        assertThat(json).isEqualTo("[]");
-        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() {
+        MockMvcHandler<List<EventService.EventOutput>> handler = new MockMvcHandler<>(new TypeReference<>() {
         });
+
+        doGetAllEvents(handler);
+
+        List<EventService.EventOutput> output = handler.get();
         assertThat(output).isEmpty();
     }
 
@@ -55,15 +51,46 @@ class EventApiTest {
         Event event = new Event(id, "A");
         eventMemoryRepository.save(event);
 
-        String json = mockMvc.perform(get("/events").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(Charset.defaultCharset());
-        List<EventService.EventOutput> output = JsonUtils.fromJson(json, new TypeReference<>() {
+        MockMvcHandler<List<EventService.EventOutput>> handler = new MockMvcHandler<>(new TypeReference<>() {
         });
+
+        doGetAllEvents(handler);
+
+        List<EventService.EventOutput> output = handler.get();
         assertThat(output).hasSize(1);
         assertThat(output.get(0).id()).isEqualTo(id);
         assertThat(output.get(0).name()).isEqualTo("A");
+    }
+
+    @Test
+    void deveRetornarUmEventoPeloId() throws Exception {
+        UUID id = UUID.randomUUID();
+        Event event = new Event(id, "A");
+        eventMemoryRepository.save(event);
+
+        MockMvcHandler<EventService.EventOutput> handler = new MockMvcHandler<>(EventService.EventOutput.class);
+
+        doGetOneEvent(id, handler);
+
+        EventService.EventOutput output = handler.get();
+        assertThat(output).isNotNull();
+        assertThat(output.id()).isEqualTo(id);
+        assertThat(output.name()).isEqualTo("A");
+    }
+
+    private void doGetOneEvent(UUID id, MockMvcHandler<?> handler) throws Exception {
+        mockMvc.perform(get("/events/{id}", id.toString()).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(handler);
+    }
+
+    private void doGetAllEvents(MockMvcHandler<?> handler) throws Exception {
+        mockMvc.perform(get("/events").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(handler);
     }
 }
